@@ -2,7 +2,7 @@
 
 simulateComplexDiffusion_OADA<-function(par,network,transmissionFunction=function(par,connectionToInformed) sum(par[1]*connectionToInformed),sumRateAcrossNetworks=T,
                                         demons=rep(0,dim(network)[1]), ilv="ILVabsent",asoc_coef=NULL, int_coef=NULL,
-                                        label="simulatedDiffusion"){
+                                        label="simulatedDiffusion", pureSocial=F){
 
   #Convert network to 3d array if needed
   if(length(dim(network))==2){
@@ -88,16 +88,21 @@ simulateComplexDiffusion_OADA<-function(par,network,transmissionFunction=functio
     }
 
     #Calculate total (relative) rate
-    totalRate <- (exp(asocialLP) + exp(socialLP) * unscaled.st)*(1-status)
-    #Calculate the probability each will be the next to learn
-    probs<- totalRate/sum(totalRate)
+    #If we are simulating pure social learning the asocial rate is set to zero
+    totalRate <- (exp(asocialLP)*(1-pureSocial*1) + exp(socialLP) * unscaled.st)*(1-status)
 
-    #Simulate the next individual to learn
-    nextToLearn<- which(rmultinom(n=1,size=1,prob=probs)==1)
-    #Record in orderAcq vector
-    orderAcq[i]<-nextToLearn
-    #Update status
-    status[nextToLearn]<-1
+    if(sum(totalRate)>0){
+      #Calculate the probability each will be the next to learn
+      probs<- totalRate/sum(totalRate)
+
+      #Simulate the next individual to learn
+      nextToLearn<- which(rmultinom(n=1,size=1,prob=probs)==1)
+      #Record in orderAcq vector
+      orderAcq[i]<-nextToLearn
+      #Update status
+      status[nextToLearn]<-1
+    }
+
     #Record the total relative rate, since this can used later to generate times of acquisition
     totalRatesRecord[i]<-sum(totalRate)
   }
