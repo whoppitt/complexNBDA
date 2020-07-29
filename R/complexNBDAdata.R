@@ -609,8 +609,8 @@ setMethod("initialize",
                   status <- c(status, statusMatrix[unlist(naive.id[[event]]), min(nAcq+1,event+1)])
                   presentInDiffusion<-c(presentInDiffusion,presenceMatrix[unlist(naive.id[[event]]), min(nAcq+1,event+1)])
 
-
-                  temp.stMetric <-stMetric[time2==event,,] # reset this before the metrics for each event are calculated
+                  temp.stMetric <-array(stMetric[time2==event,,],dim=c(sum(time2==event),dim(stMetric)[-1])) # reset this before the metrics for each event are calculated
+                  #temp.stMetric <-stMetric[time2==event,,] # reset this before the metrics for each event are calculated
                   temp.statusOfOthers<-statusOfOthers[time2==event,]
 
                   for (learner in 1:length(nonlearners)){
