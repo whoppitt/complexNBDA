@@ -2,7 +2,7 @@
 
 simulateComplexDiffusion_OADA<-function(par,network,transmissionFunction=function(par,connectionToInformed) sum(par[1]*connectionToInformed),sumRateAcrossNetworks=T,
                                         demons=rep(0,dim(network)[1]), ilv="ILVabsent",asoc_coef=NULL, int_coef=NULL,
-                                        label="simulatedDiffusion", pureSocial=F){
+                                        label="simulatedDiffusion", pureSocial=F,simpleOutput=F){
 
   #Convert network to 3d array if needed
   if(length(dim(network))==2){
@@ -115,11 +115,16 @@ simulateComplexDiffusion_OADA<-function(par,network,transmissionFunction=functio
   #Convert network to 3d array if needed
     if(length(dim(network))!=3) network<-array(network,dim=c(dim(network),1))
 
-    simData<-complexNBDAdata(label=label, assMatrix=network, asoc_ilv = ilv,
-                    int_ilv = ilv, orderAcq=orderAcq,
-                    demons = demons,asocialTreatment = "constant")
 
-  return(simData)
+    if(simpleOutput){
+      return(orderAcq)
+    }else{
+      simData<-complexNBDAdata(label=label, assMatrix=network, asoc_ilv = ilv,
+                               int_ilv = ilv, orderAcq=orderAcq,
+                               demons = demons,asocialTreatment = "constant")
+
+      return(simData)
+    }
 
 }
 
@@ -127,7 +132,7 @@ simulateComplexDiffusion_OADA<-function(par,network,transmissionFunction=functio
 
 simulateComplexDiffusion_TADA<-function(par,network,transmissionFunction=function(par,connectionToInformed) sum(par[1]*connectionToInformed),sumRateAcrossNetworks=T,
                                         demons=rep(0,dim(network)[1]), ilv="ILVabsent",asoc_coef=NULL, int_coef=NULL,
-                                        label="simulatedDiffusion", pureSocial=F){
+                                        label="simulatedDiffusion", pureSocial=F,simpleOutput=F){
 
   #Convert network to 3d array if needed
   if(length(dim(network))==2){
@@ -244,10 +249,14 @@ simulateComplexDiffusion_TADA<-function(par,network,transmissionFunction=functio
   #Convert network to 3d array if needed
   if(length(dim(network))!=3) network<-array(network,dim=c(dim(network),1))
 
-  simData<-complexNBDAdata(label=label, assMatrix=network, asoc_ilv = ilv,
-                           int_ilv = ilv, orderAcq=orderAcq,timeAcq=timeAcq,
-                           demons = demons,asocialTreatment = "constant")
 
-  return(simData)
 
+  if(simpleOutput){
+    return(list(orderAcq=orderAcq,timeAcq=timeAcq))
+  }else{
+    simData<-complexNBDAdata(label=label, assMatrix=network, asoc_ilv = ilv,
+                             int_ilv = ilv, orderAcq=orderAcq,timeAcq=timeAcq,
+                             demons = demons,asocialTreatment = "constant")
+    return(simData)
+  }
 }
