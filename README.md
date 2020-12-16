@@ -1,4 +1,4 @@
-# complexNBDA is an R package allowing the fitting of complex network based diffusion analysis (complex NBDA) models, and the simulation of data from such models. 
+# complexNBDA is an R package allowing the fitting of complex network based diffusion analysis (complex NBDA) models and the simulation of data from such models. 
 #For more details see the pre-print of Firth et al. at www.TBC 
 
 #To use the complexNBDA package in R you will need to install it and also the NBDA package as follows:
